@@ -1,26 +1,73 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { CreateUserDto, UpdateUserDto } from './dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { Users } from '@prisma/client';
+import { FindUserDto } from './dto/find-user.dto';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(createUserDto: CreateUserDto): Promise<Users> {
+    return await this.prisma.users.create({ data: createUserDto });
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findById(id: number) {
+    const user = await this.prisma.users.findUnique({
+      where: {
+        id,
+      },
+    });
+    return user;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async find(dto: FindUserDto) {
+    const data: Users = JSON.parse(JSON.stringify(dto));
+    const user = await this.prisma.users.findMany({
+      where: {
+        ...data,
+      },
+    });
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async findByEmail(email: string): Promise<Users> {
+    const user = await this.prisma.users.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    return user;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const user = await this.prisma.users.update({
+      where: {
+        id,
+      },
+      data: updateUserDto,
+    });
+
+    return user;
+  }
+
+  async remove(id: number) {
+    await this.prisma.users.delete({
+      where: {
+        id,
+      },
+    });
+
+    return { message: 'User deleted successfully' };
   }
 }

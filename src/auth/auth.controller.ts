@@ -6,37 +6,54 @@ import {
   Patch,
   Param,
   Delete,
+  Res,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { UserService } from 'src/user/user.service';
+import { CreateUserDto } from 'src/user/dto';
+import { LoginDto } from './dto';
+import { EmailNotRegisteredPipe, EmailRegisteredPipe } from './pipes';
+import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly authServie: AuthService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+  ) {}
 
-  @Post()
-  create(@Body() createAuthDto: CreateAuthDto) {
-    return this.authService.create(createAuthDto);
+  @Post('/register')
+  async register(@Body(EmailNotRegisteredPipe) dto: CreateUserDto) {
+    const saltrounds = 10;
+    dto.password = await bcrypt.hash(dto.password, saltrounds);
+
+    const user = await this.userService.create(dto);
+    delete user.password;
+
+    return user;
   }
 
-  @Get()
-  findAll() {
-    return this.authService.findAll();
-  }
+  @Post('/login')
+  async login(
+    @Body(EmailRegisteredPipe) dto: LoginDto,
+    @Res({
+      passthrough: true,
+    })
+    res: Response,
+  ) {
+    const { user, token } = await this.authServie.login(dto);
+    res.cookie('token', token, {
+      httpOnly: true,
+      signed: true,
+      secure: true,
+      maxAge: 10 * 60 * 60,
+    });
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
+    return { message: `Welcome, ${user.firstName} jan!` };
   }
 }
