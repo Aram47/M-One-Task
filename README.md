@@ -24,8 +24,8 @@ Ensure you have the following installed:
 ### Installation Steps
 1. **Clone the repository and install dependencies:**
 ```sh
-git clone <repository_url>
-cd <project_name>
+git clone git@github.com:Aram47/M-One-Task.git
+cd m-one-task
 npm install
 ```
 2. **Set up environment variables:**
@@ -42,6 +42,13 @@ npx prisma migrate dev --name init
 ```sh
 npm run start:dev
 ```
+### Running with Docker
+1. **Ensure Docker is installed and running.**
+2. **Run the application using Docker Compose:**
+```sh
+docker-compose up --build
+```
+This will start the application and a PostgreSQL database container.
 
 ## 📡 API Endpoints
 ### User Management
