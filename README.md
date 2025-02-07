@@ -1,16 +1,5 @@
 # 📘 User Management API Documentation
 
-## 📌 Overview
-The **User Management API** is a robust backend service built with **NestJS** and **Prisma ORM**. It enables user management, authentication, and a friendship system, allowing users to send, accept, and reject friend requests. 
-
-## 🚀 Features
-- **User Management**: Create, retrieve, update, and delete users.
-- **Friendship System**: Send, accept, and reject friend requests.
-- **Authentication & Authorization**: JWT-based authentication for secure access.
-- **Custom Decorators & Pipes**: Enhancing request validation and handling.
-- **Prisma ORM**: Efficient database management and query execution.
-- **Security Guards**: `AuthGuard` ensures authentication, `FriendshipGuard` validates friend requests.
-
 ## 📂 Project Structure
 ```
 /src
@@ -70,12 +59,6 @@ npm run start:dev
 | GET    | `/user/getFriendRequests`        | Fetch pending friend requests     |
 | PATCH  | `/user/resolveFriendRequest/:id` | Accept or reject a friend request |
 
-## 🔑 Authentication & Security
-- **JWT Authentication**: Secure user authentication with JSON Web Tokens.
-- **Authorization Guards**:
-  - `AuthGuard`: Ensures only authenticated users access protected routes.
-  - `FriendshipGuard`: Validates friend request operations.
-
 ## 🛠 Usage Examples
 ### Sending a Friend Request
 ```sh
@@ -89,14 +72,6 @@ PATCH /user/resolveFriendRequest/:id
 Headers: { Authorization: Bearer <token> }
 Body: { "status": "accepted" }
 ```
-
-## 🚀 Future Improvements
-- Implement Role-Based Access Control (RBAC)
-- Add WebSocket support for real-time friend request notifications
-- Extend API with GraphQL support
-
-## 📜 License
-This project is licensed under the MIT License.
 
 ---
 🔧 **Built with NestJS, Prisma, and PostgreSQL**
