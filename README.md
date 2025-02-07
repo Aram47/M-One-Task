@@ -66,20 +66,6 @@ This will start the application and a PostgreSQL database container.
 | GET    | `/user/getFriendRequests`        | Fetch pending friend requests     |
 | PATCH  | `/user/resolveFriendRequest/:id` | Accept or reject a friend request |
 
-## 🛠 Usage Examples
-### Sending a Friend Request
-```sh
-POST /user/sendFriendRequest/:id
-Headers: { Authorization: Bearer <token> }
-```
-
-### Accepting a Friend Request
-```sh
-PATCH /user/resolveFriendRequest/:id
-Headers: { Authorization: Bearer <token> }
-Body: { "status": "accepted" }
-```
-
 ---
 🔧 **Built with NestJS, Prisma, and PostgreSQL**
 
