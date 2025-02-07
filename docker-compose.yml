@@ -1,10 +1,13 @@
 services:
-  app: 
-    image: aram4774/m-one-task:1.0.1
+  app:
+    image: aram4774/m-one-task:1.0.3
     ports:
       - "${PORT}:${PORT}"
     environment:
       - PORT=${PORT}
+      - DATABASE_URL=postgresql://johndoe:admin1337@dev-db:5432/your-db-name?schema=public
+    depends_on:
+      - dev-db
   
   dev-db:
     image: postgres
