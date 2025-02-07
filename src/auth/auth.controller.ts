@@ -51,7 +51,7 @@ export class AuthController {
       httpOnly: true,
       signed: true,
       secure: true,
-      maxAge: 10 * 60 * 60,
+      maxAge: 10 * 60 * 60 * 1000 * 30,
     });
 
     return { message: `Welcome, ${user.firstName} jan!` };

@@ -5,7 +5,10 @@ import { PrismaService } from '../../prisma/prisma.service';
 export class UserExistsPipe implements PipeTransform {
   constructor(private readonly prisma: PrismaService) {}
   async transform(id: string) {
-    const user = await this.prisma.users.findUnique({
+    if (!id) {
+      throw new BadRequestException('No id provided');
+    }
+    const user = await this.prisma.user.findUnique({
       where: {
         id: Number(id),
       },

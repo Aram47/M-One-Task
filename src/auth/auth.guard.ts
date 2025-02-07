@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
     try {
       const obj: { email: string } = this.jwt.verify(token);
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      request.user = await this.prisma.users.findUnique({
+      request.user = await this.prisma.user.findUnique({
         where: {
           email: obj.email,
         },

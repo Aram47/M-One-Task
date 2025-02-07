@@ -6,7 +6,7 @@ import { CreateUserDto } from '../../user/dto';
 export class EmailNotRegisteredPipe implements PipeTransform {
   constructor(private readonly prisma: PrismaService) {}
   async transform(dto: CreateUserDto) {
-    const user = await this.prisma.users.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: {
         email: dto.email,
       },
